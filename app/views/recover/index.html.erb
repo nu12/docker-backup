@@ -1,2 +1,27 @@
 <h1>Recover#index</h1>
 <p>Find me in app/views/recover/index.html.erb</p>
+
+<%= link_to "Upload file", "/recover/upload" %>
+
+Recover selected
+Recover all
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+  <tbody>
+
+<% @files.select{|el| el != "." && el != ".."}.each do |file| %>
+<tr>
+    <td><%= file %></td>
+    <td><%= link_to "Download", download_path(file), target: "_blank"%></td>
+    <td><%= link_to "Delete", "/recover/delete/#{file}" %></td>
+    <td><%= link_to "Create volume", "/recover/new/#{file}" %></td>
+    
+</tr>
+<% end %>
+</tbody>
+</table>

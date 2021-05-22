@@ -1,2 +1,26 @@
 <h1>Backup#index</h1>
 <p>Find me in app/views/backup/index.html.erb</p>
+
+Backup selected
+Backup all
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Mountpoint</th>
+      <th>CreatedAt</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+
+<% @volumes.each do |volume| %>
+<tr>
+    <td><%= volume["Name"] %></td>
+    <td><%= volume["Mountpoint"] %></td>
+    <td><%= volume["CreatedAt"] %></td>
+    <td><%= link_to 'Create backup', "/backup/new/#{volume["Name"]}" %></td>
+</tr>
+<% end %>
+</tbody>
+</table>

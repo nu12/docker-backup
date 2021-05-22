@@ -1,0 +1,14 @@
+<h1>Recover#upload</h1>
+<p>Find me in app/views/recover/upload.html.erb</p>
+
+<%= form_with(url: "/recover/upload", method: "post") do |form| %>
+  
+    <div class="form-group">
+        <%= form.label :name %>
+        <%= form.file_field :file  %>
+    </div>
+
+    <div class="actions">
+        <%= form.submit "Send file", class: "btn btn-primary form-control" %>
+    </div>
+<% end %>
