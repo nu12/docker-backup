@@ -23,7 +23,7 @@ class RecoverController < ApplicationController
       {Image: "ubuntu:latest",  HostConfig: { 
         Mounts: [ 
           { Type: "volume", Source: volume, Target: "/volume" }, 
-          { Type: "bind", Source: "/backup", Target: "/backup" } ] }, 
+          { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
         Cmd: ["bash", "-c", "cd /volume && tar xvf /backup/#{file}.tar"] }
     )
     c.start("docker-recover")
