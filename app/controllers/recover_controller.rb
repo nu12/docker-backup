@@ -8,28 +8,7 @@ class RecoverController < ApplicationController
   end
 
   def create
-    file = params[:name]
-    volume = params[:volume]
-
-    v = Docker::API::Volume.new
-    v.create(Name: volume)
-
-    i = Docker::API::Image.new
-    i.create( fromImage: "ubuntu:latest" )
-  
-    c = Docker::API::Container.new
-    c.create( 
-      {name: "docker-recover"}, 
-      {Image: "ubuntu:latest",  HostConfig: { 
-        Mounts: [ 
-          { Type: "volume", Source: volume, Target: "/volume" }, 
-          { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
-        Cmd: ["bash", "-c", "cd /volume && tar xvf /backup/#{file}.tar"] }
-    )
-    c.start("docker-recover")
-    c.wait("docker-recover")
-    c.remove("docker-recover")
-
+    create_volume_from_tar_file(params[:name], params[:volume])
     redirect_to recover_path
   end
 
@@ -53,5 +32,24 @@ class RecoverController < ApplicationController
       file.write(uploaded_io.read)
     end
     redirect_to recover_path
+  end
+
+  private
+  def create_volume_from_tar_file(file, volume)
+    v = Docker::API::Volume.new
+    v.create(Name: volume)
+
+    pull_image("ubuntu:latest")
+  
+    c = Docker::API::Container.new
+    c.create( 
+      {name: "docker-recover"}, 
+      {Image: "ubuntu:latest",  HostConfig: { 
+        Mounts: [ 
+          { Type: "volume", Source: volume, Target: "/volume" }, 
+          { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
+        Cmd: ["bash", "-c", "cd /volume && tar xvf /backup/#{file}.tar"] }
+    )
+    launch_container("docker-recover")
   end
 end

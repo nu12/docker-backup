@@ -9,11 +9,14 @@ class BackupController < ApplicationController
   end
 
   def create
-    volume = params[:name]
-    file = params[:file]
+    create_tar_file(params[:name], params[:file])
+    redirect_to volume_path
+  end
 
-    i = Docker::API::Image.new
-    i.create( fromImage: "ubuntu:latest" )
+  private
+
+  def create_tar_file(volume, file)
+    pull_image("ubuntu:latest")
     
     c = Docker::API::Container.new
     c.create( 
@@ -24,10 +27,6 @@ class BackupController < ApplicationController
           { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
         Cmd: ["bash", "-c", "cd /volume && tar cvf /backup/#{file}.tar ."] }
     )
-    c.start("docker-backup")
-    c.wait("docker-backup")
-    c.remove("docker-backup")
-
-    redirect_to volume_path
+    launch_container("docker-backup")
   end
 end
