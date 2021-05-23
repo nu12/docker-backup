@@ -1,30 +1,27 @@
-# README
+# Docker Backup
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This tool is inspired in [this article](https://blog.ssdnodes.com/blog/docker-backup-volumes/) and is useful to create and restore backups from docker volumes.
 
-Things you may want to cover:
+## Deploy
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
+Create a volume called `docker-backup` and configure `/path/to/files` to be a folder you can access to get files from or put them into (i.e `~/backup`).
+```shell
+$ docker volume create --opt type=none --opt o=bind --opt device=/path/to/files docker-backup
+```
+ Map the volume created and the docker socket.
 
 ```shell
-
-$ docker volume create --opt type=none --opt o=bind --opt device=~/backup docker-backup
 $ docker run --rm -p 3000:3000 -v docker-backup:/backup -v /var/run/docker.sock:/var/run/docker.sock docker-backup
 ```
 
-* ...
+## Usage
+
+Use the `Volumes` page to view a list of all volumes available. Create a backup file using the `Create backup` button.
+
+![alt text](public/backup.PNG)
+
+In the `Recovery` page you can see all `.tar` files generated. You can also download created files and upload previously downloaded files.
+
+![alt text](public/recovery.PNG)
+
+Note: to manage large files, it's recommended to use external tools like scp, ftp, etc, and get the files directly from the mapped volume path.
