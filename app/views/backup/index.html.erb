@@ -1,9 +1,11 @@
-<h1>Backup#index</h1>
-<p>Find me in app/views/backup/index.html.erb</p>
+<h1>Docker volumes</h1>
+<p>From this page you can create a <span class="badge bg-primary">.tar</span> file from any existing volume.</p>
 
-Backup selected
-Backup all
-<table class="table">
+<button type="button" class="btn btn-sm btn-secondary" disabled>Backup selected</button>
+<button type="button" class="btn btn-sm btn-secondary" disabled>Backup all</button>
+
+
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Name</th>
@@ -16,10 +18,10 @@ Backup all
 
 <% @volumes.each do |volume| %>
 <tr>
-    <td><%= volume["Name"] %></td>
-    <td><%= volume["Mountpoint"] %></td>
+    <td><%= volume["Name"].size > 24 ? "#{volume["Name"][0,21]}..." : volume["Name"]  %></td>
+    <td><%= volume["Mountpoint"].size > 42 ? "#{volume["Mountpoint"][0,39]}..." : volume["Mountpoint"] %></td>
     <td><%= volume["CreatedAt"] %></td>
-    <td><%= link_to 'Create backup', "/backup/new/#{volume["Name"]}" %></td>
+    <td><%= link_to'Create backup', "/backup/new/#{volume["Name"]}", class:"btn btn-success btn-sm" unless volume["Name"] == "docker-backup" %></td>
 </tr>
 <% end %>
 </tbody>

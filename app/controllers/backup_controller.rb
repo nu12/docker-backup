@@ -1,7 +1,7 @@
 class BackupController < ApplicationController
   def index
     volume = Docker::API::Volume.new
-    @volumes = volume.list.json["Volumes"]
+    @volumes = volume.list.json["Volumes"].sort { |a, b| a["Name"] <=> b["Name"] }
   end
 
   def new
