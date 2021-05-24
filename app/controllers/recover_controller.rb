@@ -48,7 +48,7 @@ class RecoverController < ApplicationController
         Mounts: [ 
           { Type: "volume", Source: volume, Target: "/volume" }, 
           { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
-        Cmd: ["bash", "-c", "cd /volume && tar xvf /backup/#{file}.tar"] }
+        Cmd: ["bash", "-c", "cd /volume && tar xvf /backup/#{file}"] }
     )
     launch_container("docker-recover")
   end
