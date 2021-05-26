@@ -1,7 +1,5 @@
 FROM ruby:2.7.2-alpine as builder
 
-# Set ARG in hooks/build to use Dockerhub autobuild
-ARG RAILS_MASTER_KEY
 ENV RAILS_ENV=production \
     NODE_ENV=production
 
@@ -12,13 +10,14 @@ RUN apk add --no-cache nodejs yarn build-base tzdata
 COPY . /app/
  # Install gems
 RUN bundle config set without 'development test' \
- && bundle install
+ && bundle install \
  # Install & compile yarn packages
-RUN yarn install --production
-RUN bin/rails webpacker:compile
-RUN bin/rails assets:precompile
+ && export RAILS_MASTER_KEY=$(bin/rake secret) \
+ && yarn install --production \
+ && bin/rails webpacker:compile \
+ && bin/rails assets:precompile \
  # Remove unneeded files (cached *.gem, *.o, *.c)
-RUN rm -rf /usr/local/bundle/cache/*.gem \
+ && rm -rf /usr/local/bundle/cache/*.gem \
  && find /usr/local/bundle/gems/ -name "*.c" -delete \
  && find /usr/local/bundle/gems/ -name "*.o" -delete \
  # Remove folders not needed in resulting image
