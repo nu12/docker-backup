@@ -12,8 +12,7 @@ COPY . /app/
 RUN bundle config set without 'development test' \
  && bundle install \
  # Install & compile yarn packages
- && export RAILS_MASTER_KEY=$(bin/rake secret) \
- && yarn install --production \
+ && yarn install \
  && bin/rails webpacker:compile \
  && bin/rails assets:precompile \
  # Remove unneeded files (cached *.gem, *.o, *.c)
