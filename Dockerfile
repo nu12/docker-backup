@@ -10,11 +10,11 @@ RUN apk add --no-cache nodejs yarn build-base tzdata
 COPY . /app/
  # Install gems
 RUN bundle config set without 'development test' \
- && bundle install \
+ && bundle install 
  # Install & compile yarn packages
- && yarn install \
- && bin/rails webpacker:compile \
- && bin/rails assets:precompile \
+RUN yarn install \
+ && rails webpacker:compile \
+ && rails assets:precompile \
  # Remove unneeded files (cached *.gem, *.o, *.c)
  && rm -rf /usr/local/bundle/cache/*.gem \
  && find /usr/local/bundle/gems/ -name "*.c" -delete \
