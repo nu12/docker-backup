@@ -23,7 +23,7 @@ class RecoverController < ApplicationController
   def delete
     file = params[:file]
     File.delete("/backup/#{file}.tar") if File.exist?("/backup/#{file}.tar")
-    flash[:success] = "The backup file successfully deleted."
+    flash[:success] = "The backup file was successfully deleted."
     redirect_to recover_path
   end
 

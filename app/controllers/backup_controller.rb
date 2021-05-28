@@ -15,4 +15,17 @@ class BackupController < ApplicationController
     flash[:primary] = "Backup for volume #{volume} was successfully scheduled. It may take some time to complete."
     redirect_to volume_path
   end
+
+  def delete
+    name = params[:id]
+    v = Docker::API::Volume.new
+    r = v.remove(name)
+    if r.success?
+      flash[:success] = "Volume successfully deleted."
+    else
+      flash[:danger] = r.json["message"]
+      p r
+    end
+    redirect_to volume_path
+  end
 end

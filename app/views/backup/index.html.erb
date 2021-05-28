@@ -21,7 +21,12 @@
     <td><%= volume["Name"].size > 24 ? "#{volume["Name"][0,21]}..." : volume["Name"]  %></td>
     <td><%= volume["Mountpoint"].size > 42 ? "#{volume["Mountpoint"][0,39]}..." : volume["Mountpoint"] %></td>
     <td><%= volume["CreatedAt"] %></td>
-    <td><%= link_to'Create backup', "/backup/new/#{volume["Name"]}", class:"btn btn-success btn-sm" unless volume["Name"] == "docker-backup" %></td>
+    <td>
+      <% unless volume["Name"] == "docker-backup" %>
+        <%= link_to'Create backup', "/backup/new/#{volume["Name"]}", class:"btn btn-success btn-sm" %>
+        <%= link_to 'Delete', "/volume/#{volume["Name"]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm" %>  
+      <% end %>
+    </td>
 </tr>
 <% end %>
 </tbody>

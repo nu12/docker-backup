@@ -4,8 +4,10 @@ Rails.application.routes.draw do
   get 'recover/new/:name', to: "recover#new"
   post 'recover/create'
   get 'volume', to: "backup#index"
+  delete 'volume/:id', to: "backup#delete"
   get 'backup/new/:name', to: "backup#new"
   post 'backup/create'
+
 
   get '/recover/download/:file', to: 'recover#download', as: 'download'
   get '/recover/delete/:file', to: 'recover#delete'
