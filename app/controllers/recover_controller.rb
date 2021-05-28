@@ -8,7 +8,10 @@ class RecoverController < ApplicationController
   end
 
   def create
-    create_volume_from_tar_file(params[:name], params[:volume])
+    file = params[:name] 
+    volume = params[:volume]
+    VolumeRecoveryJob.perform_later file, volume
+    flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
     redirect_to recover_path
   end
 
@@ -20,6 +23,7 @@ class RecoverController < ApplicationController
   def delete
     file = params[:file]
     File.delete("/backup/#{file}.tar") if File.exist?("/backup/#{file}.tar")
+    flash[:success] = "The backup file successfully deleted."
     redirect_to recover_path
   end
 
@@ -32,24 +36,5 @@ class RecoverController < ApplicationController
       file.write(uploaded_io.read)
     end
     redirect_to recover_path
-  end
-
-  private
-  def create_volume_from_tar_file(file, volume)
-    v = Docker::API::Volume.new
-    v.create(Name: volume)
-
-    pull_image("ubuntu:latest")
-  
-    c = Docker::API::Container.new
-    c.create( 
-      {name: "docker-recover"}, 
-      {Image: "ubuntu:latest",  HostConfig: { 
-        Mounts: [ 
-          { Type: "volume", Source: volume, Target: "/volume" }, 
-          { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
-        Cmd: ["bash", "-c", "cd /volume && tar xvf /backup/#{file}"] }
-    )
-    launch_container("docker-recover")
   end
 end

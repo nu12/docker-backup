@@ -9,24 +9,10 @@ class BackupController < ApplicationController
   end
 
   def create
-    create_tar_file(params[:name], params[:file])
+    volume = params[:name]
+    file = params[:file]
+    VolumeBackupJob.perform_later volume, file
+    flash[:primary] = "Backup for volume #{volume} was successfully scheduled. It may take some time to complete."
     redirect_to volume_path
-  end
-
-  private
-
-  def create_tar_file(volume, file)
-    pull_image("ubuntu:latest")
-    
-    c = Docker::API::Container.new
-    c.create( 
-      {name: "docker-backup"}, 
-      {Image: "ubuntu:latest",  HostConfig: { 
-        Mounts: [ 
-          { Type: "volume", Source: volume, Target: "/volume" }, 
-          { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
-        Cmd: ["bash", "-c", "cd /volume && tar cvf /backup/#{file}.tar ."] }
-    )
-    launch_container("docker-backup")
   end
 end

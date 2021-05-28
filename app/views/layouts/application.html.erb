@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>DockerBackup</title>
+    <title>Volume Backup Tool</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -22,7 +22,15 @@
       </ul>
     </nav>
     <div class="container">
+
+      <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %> alert-dismissible fade show" role="alert">
+        <%= value %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      <% end %>
       <%= yield %>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
   </body>
 </html>
