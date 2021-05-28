@@ -11,7 +11,7 @@ $ docker volume create --opt type=none --opt o=bind --opt device=/path/to/files 
  Map the volume created and the docker socket.
 
 ```shell
-$ docker run -d --rm -p 3000:3000 -v docker-backup:/backup -v /var/run/docker.sock:/var/run/docker.sock nu12/docker-backup
+$ docker run -d --rm -p 3000:3000 -v docker-backup:/backup -v /var/run/docker.sock:/var/run/docker.sock nu12/volume-backup-tool
 ```
 
 ## Usage
