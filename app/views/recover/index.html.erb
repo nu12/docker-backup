@@ -21,7 +21,7 @@
     <td>
       <%= link_to "Create volume", "/recover/new/#{file}", class:"btn btn-success btn-sm"  %>
       <%= link_to "Download", download_path(file), target: "_blank", class:"btn btn-primary btn-sm" %>
-      <%= link_to "Delete", "/recover/delete/#{file}", class:"btn btn-danger btn-sm"  %>
+      <%= link_to "Delete", "/recover/delete/#{file}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm"  %>
     </td>
 </tr>
 <% end %>
