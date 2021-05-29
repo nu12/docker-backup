@@ -17,4 +17,8 @@ class ApplicationJob < ActiveJob::Base
       c.wait(container)
       c.remove(container)
   end
+
+  def generate_name()
+    return (0...8).map { (65 + rand(26)).chr }.join
+  end
 end
