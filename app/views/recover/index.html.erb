@@ -1,7 +1,9 @@
 <h1>Recovery files</h1>
 <p>From this page you can create a volume from any <span class="badge bg-primary">.tar</span> file listed below.</p>
 
-<%= link_to "Upload file", "/recover/upload", class:"btn btn-primary btn-sm" %>
+<%= link_to "/recover/upload", class:"btn btn-primary btn-sm" do %>
+  <i class="fas fa-upload"></i> Upload file
+<% end %>
 
 <button type="button" class="btn btn-sm btn-secondary" disabled>Recover selected</button>
 <button type="button" class="btn btn-sm btn-secondary" disabled>Recover all</button>
@@ -20,8 +22,12 @@
     <td><%= file.size > 24 ? "#{file[0,21]}..." : file %></td>
     <td>
       <%= link_to "Create volume", "/recover/new/#{file}", class:"btn btn-success btn-sm"  %>
-      <%= link_to "Download", download_path(file), target: "_blank", class:"btn btn-primary btn-sm" %>
-      <%= link_to "Delete", "/recover/delete/#{file}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm"  %>
+      <%= link_to download_path(file), target: "_blank", class:"btn btn-primary btn-sm", title: "Download file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+        <i class="fas fa-download"></i>
+      <% end %>
+      <%= link_to "/recover/delete/#{file}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+        <i class="fas fa-trash-alt"></i>
+      <% end %>
     </td>
 </tr>
 <% end %>

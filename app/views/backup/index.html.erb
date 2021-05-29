@@ -4,7 +4,6 @@
 <button type="button" class="btn btn-sm btn-secondary" disabled>Backup selected</button>
 <button type="button" class="btn btn-sm btn-secondary" disabled>Backup all</button>
 
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -24,7 +23,9 @@
     <td>
       <% unless volume["Name"] == "docker-backup" %>
         <%= link_to'Create backup', "/backup/new/#{volume["Name"]}", class:"btn btn-success btn-sm" %>
-        <%= link_to 'Delete', "/volume/#{volume["Name"]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm" %>  
+        <%= link_to "/volume/#{volume["Name"]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete volume", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+          <i class="fas fa-trash-alt"></i>
+        <% end %>
       <% end %>
     </td>
 </tr>
