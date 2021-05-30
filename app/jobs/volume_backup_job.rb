@@ -17,5 +17,14 @@ class VolumeBackupJob < ApplicationJob
         Cmd: ["bash", "-c", "cd /volume && tar cvf /backup/#{file}.tar ."] }
     )
     launch_container(container_name)
+
+    ActionCable.server.broadcast("global_notification", render_partial(volume, file))
+  end
+
+  private
+
+  def render_partial(volume, file)
+    BackupController.renderer.render partial: "backup/toast", locals: {volume: volume, file: file}
   end
 end
+

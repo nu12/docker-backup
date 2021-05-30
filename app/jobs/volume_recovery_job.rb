@@ -19,5 +19,13 @@ class VolumeRecoveryJob < ApplicationJob
         Cmd: ["bash", "-c", "cd /volume && tar xvf /backup/#{file}"] }
     )
     launch_container(container_name)
+
+    ActionCable.server.broadcast("global_notification", render_partial(file, volume))
+  end
+
+  private
+
+  def render_partial(file, volume)
+    RecoverController.renderer.render partial: "recover/toast", locals: {file: file, volume: volume}
   end
 end
