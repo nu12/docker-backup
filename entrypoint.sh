@@ -1,7 +1,7 @@
 #!/bin/bash
 
-redis-server --daemonize yes
+export SECRET_KEY_BASE=$(rails secret)
 
-export SECRET_KEY_BASE=$(bin/rake secret)
+redis-server --daemonize yes
 
 rails s -b 0.0.0.0
