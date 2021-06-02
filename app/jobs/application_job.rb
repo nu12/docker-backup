@@ -14,8 +14,9 @@ class ApplicationJob < ActiveJob::Base
   def launch_container(container)
       c = Docker::API::Container.new
       c.start(container)
-      c.wait(container)
-      c.remove(container)
+      # Launch Job to check completion
+
+      ToastJob.perform_now "primary", "Container was launched!"
   end
 
   def generate_name()

@@ -13,6 +13,7 @@ class VolumeRecoveryJob < ApplicationJob
     c.create( 
       {name: container_name}, 
       {Image: "ubuntu:latest",  HostConfig: { 
+        AutoRemove: true,
         Mounts: [ 
           { Type: "volume", Source: volume, Target: "/volume" }, 
           { Type: "volume", Source: "docker-backup", Target: "/backup" } ] }, 
@@ -20,12 +21,5 @@ class VolumeRecoveryJob < ApplicationJob
     )
     launch_container(container_name)
 
-    ActionCable.server.broadcast("global_notification", render_partial(file, volume))
-  end
-
-  private
-
-  def render_partial(file, volume)
-    RecoverController.renderer.render partial: "recover/toast", locals: {file: file, volume: volume}
   end
 end
