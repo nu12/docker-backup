@@ -21,5 +21,7 @@ class VolumeRecoveryJob < ApplicationJob
     )
     launch_container(container_name)
 
+    StatusCheckJob.perform_later :recovery, container_name, file, volume
+
   end
 end

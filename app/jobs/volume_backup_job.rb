@@ -18,6 +18,8 @@ class VolumeBackupJob < ApplicationJob
         Cmd: ["bash", "-c", "cd /volume && tar cvf /backup/#{file}.tar ."] }
     )
     launch_container(container_name)
+
+    StatusCheckJob.perform_later :backup, container_name, file, volume
     
   end
 end
