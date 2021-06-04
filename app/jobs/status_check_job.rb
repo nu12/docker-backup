@@ -11,10 +11,10 @@ class StatusCheckJob < ApplicationJob
     end
     
     if task == :backup
-      ToastJob.perform_now "success", "Backup for #{volume} is completed.", "Backup completed"
+      ToastJob.perform_now container_name, "success", "Backup for #{volume} is completed.", "Backup completed"
       return
     end
     
-    ToastJob.perform_now "success", "New volume #{volume} created from file #{file}.", "Recovery completed"
+    ToastJob.perform_now container_name, "success", "New volume #{volume} created from file #{file}.", "Recovery completed"
   end
 end

@@ -12,7 +12,7 @@ class BackupController < ApplicationController
     volume = params[:name]
     file = params[:file]
     VolumeBackupJob.perform_later volume, file
-    flash[:primary] = "Backup for volume #{volume} was successfully scheduled. It may take some time to complete."
+    ToastJob.set(wait: 1.second).perform_later "backup-scheduled", "primary", "Backup for volume #{volume} was successfully scheduled. It may take some time to complete."
     redirect_to volume_path
   end
 
@@ -21,10 +21,9 @@ class BackupController < ApplicationController
     v = Docker::API::Volume.new
     r = v.remove(name)
     if r.success?
-      flash[:success] = "Volume successfully deleted."
+      ToastJob.set(wait: 1.second).perform_later "volume-deleted", "success", "Volume successfully deleted."
     else
-      flash[:danger] = r.json["message"]
-      p r
+      ToastJob.set(wait: 1.second).perform_later "volume-failed-delete", "danger", r.json["message"]
     end
     redirect_to volume_path
   end
