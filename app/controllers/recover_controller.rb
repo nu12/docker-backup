@@ -31,9 +31,10 @@ class RecoverController < ApplicationController
   end
 
   def save
-    uploaded_io = params[:file]
-    File.open(Rails.root.join('/backup', uploaded_io.original_filename), 'wb') do |file|
-      file.write(uploaded_io.read)
+    params[:file].each do |uploaded_io| 
+      File.open(Rails.root.join('/backup', uploaded_io.original_filename), 'wb') do |file|
+        file.write(uploaded_io.read)
+      end
     end
     redirect_to recover_path
   end

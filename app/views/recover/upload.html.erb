@@ -4,7 +4,7 @@
     <%= form_with(url: "/recover/upload", method: "post") do |form| %>
         <div class="form-group">
             <%= form.label :file, "Select file" %>
-            <%= form.file_field :file  %>
+            <%= form.file_field :file, multiple: true, accept: "application/x-tar"  %>
         </div>
 
         <div class="mt-3 actions">
