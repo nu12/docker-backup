@@ -3,6 +3,13 @@ class VolumeRecoveryJob < ApplicationJob
 
   def perform(file, volume)
     v = Docker::API::Volume.new
+    response = v.details(volume)
+
+    if response.status == 200
+      ToastJob.set(wait: 1.second).perform_later volume, "danger", "Volume #{volume} already exists. Choose a different name.", "Backup failed"
+      return
+    end
+
     v.create(Name: volume)
 
     pull_image("ubuntu:latest")
