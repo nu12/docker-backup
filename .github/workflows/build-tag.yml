@@ -15,7 +15,7 @@ jobs:
       run: curl https://get.docker.com | sh
 
     - name: Set tag name
-      run: echo "TAG=${GITHUB_REF#refs/*/ | tr -dc '0-9\.'}" >> $GITHUB_ENV
+      run: echo "TAG=${GITHUB_REF#refs/*/} | tr -dc '0-9\.'" >> $GITHUB_ENV
 
     - name: Build image
       run: docker build -t ${{ secrets.DOCKER_USER }}/${{ secrets.DOCKER_REPO }}:$TAG .
