@@ -3,16 +3,12 @@ class RecoverController < ApplicationController
     @files = Dir.entries("/backup")
   end
 
-  def new
-    @name = params[:name]
-  end
-
   def create
-    file = params[:name] 
-    volume = params[:volume]
-    VolumeRecoveryJob.perform_later file, volume
+    @file = params[:name] 
+    @volume = params[:volume]
+    VolumeRecoveryJob.perform_later @file, @volume
     ToastJob.set(wait: 1.second).perform_later "recovery-scheduled", "primary", "Volume creation was successfully scheduled. It may take some time to complete."
-    redirect_to recover_path
+    render :create
   end
 
   def download

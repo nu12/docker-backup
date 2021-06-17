@@ -1,0 +1,4 @@
+<% file_name = @file.split(".")[0] %>
+
+var modal = bootstrap.Modal.getInstance(document.getElementById("modal-<%= file_name %>"));
+modal.hide();

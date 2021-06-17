@@ -3,17 +3,15 @@ Rails.application.routes.draw do
 
   # Volume / backup routes
   get 'volume', to: "backup#index"
-  
-  get 'backup/new/:name', to: "backup#new"
-  post 'backup/create'
+
+  post 'backup/create', to: "backup#create", defaults: { format: :js }
   
   delete 'volume/:id', to: "backup#delete"
   
   # Recovery routes
   get 'recover', to: "recover#index"
   
-  get 'recover/new/:name', to: "recover#new"
-  post 'recover/create'
+  post 'recover/create', to: "recover#create", defaults: { format: :js }
   
   get '/recover/upload', to: 'recover#upload'
   post '/recover/upload', to: 'recover#save'

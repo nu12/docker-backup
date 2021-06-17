@@ -4,16 +4,12 @@ class BackupController < ApplicationController
     @volumes = volume.list.json["Volumes"].sort { |a, b| a["Name"] <=> b["Name"] }
   end
 
-  def new
-    @name = params[:name]
-  end
-
   def create
-    volume = params[:name]
-    file = params[:file]
-    VolumeBackupJob.perform_later volume, file
-    ToastJob.set(wait: 1.second).perform_later "backup-scheduled", "primary", "Backup for volume #{volume} was successfully scheduled. It may take some time to complete."
-    redirect_to volume_path
+    @volume = params[:name]
+    @file = params[:file]
+    VolumeBackupJob.perform_later @volume, @file
+    ToastJob.set(wait: 1.second).perform_later "backup-scheduled", "primary", "Backup for volume #{@volume} was successfully scheduled. It may take some time to complete."
+    render :create
   end
 
   def delete
