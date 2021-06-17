@@ -25,3 +25,8 @@ In the `Recovery` page you can see all `.tar` files generated. You can also down
 ![alt text](public/recovery.PNG)
 
 Note: to manage large files, it's recommended to use external tools like scp, ftp, etc, and get the files directly from the mapped volume path.
+
+## Development
+
+### Known issues
+* If Toasts are created too fast, they may not fade out. Refresh the page to clear all Toasts.
