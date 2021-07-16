@@ -9,12 +9,9 @@ class StatusCheckJob < ApplicationJob
       StatusCheckJob.set(wait: 1.second).perform_later task, container_name, file, volume
       return
     end
+
+    id = task == :backup ? volume : file
     
-    if task == :backup
-      ToastJob.perform_now container_name, "success", "Backup for #{volume} is completed.", "Backup completed"
-      return
-    end
-    
-    ToastJob.perform_now container_name, "success", "New volume #{volume} created from file #{file}.", "Recovery completed"
+    IconJob.perform_now id, '<i class="fas fa-check"></i>'
   end
 end

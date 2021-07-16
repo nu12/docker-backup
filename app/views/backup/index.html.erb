@@ -1,6 +1,8 @@
 <h1>Docker volumes</h1>
 <p>From this page you can create a <span class="badge bg-primary">.tar</span> file from any existing volume.</p>
 
+<% if @volumes.size > 0 %>
+
 <button type="button" class="btn btn-sm btn-secondary" disabled>Backup selected</button>
 <button type="button" class="btn btn-sm btn-secondary" disabled>Backup all</button>
 
@@ -11,6 +13,7 @@
       <th>Mountpoint</th>
       <th>CreatedAt</th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -20,6 +23,7 @@
     <td><%= volume["Name"].size > 24 ? "#{volume["Name"][0,21]}..." : volume["Name"]  %></td>
     <td><%= volume["Mountpoint"].size > 42 ? "#{volume["Mountpoint"][0,39]}..." : volume["Mountpoint"] %></td>
     <td><%= volume["CreatedAt"] %></td>
+    <td class="icon-<%= volume['Name'] %>"></td>
     <td>
       <% unless volume["Name"] == "docker-backup" %>
         <%= link_to 'Create backup', "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{volume['Name']}"} %>
@@ -44,7 +48,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <%= form_with(url: "/backup/create", method: "post", local:false) do |form| %>
+        <%= form_with(url: "/backup/create", method: "post") do |form| %>
 
           <div class="form-group">
               <%= form.label :name, "Volume name" %>
@@ -64,4 +68,15 @@
     </div>
   </div>
 </div>
+<% end %>
+
+<% else %>
+
+<div class="container mx-auto text-center my-5">
+  <i class="fas fa-exclamation-triangle h1"></i>
+  <h2>Hum.. This page shouldn't be empty.</h2>
+  <p>To run this application, create a volume named "docker-backup".</p>
+  <p class="bg-light text-dark">$ docker volume create --opt type=none --opt o=bind --opt device=/path/to/files docker-backup</p>
+</div>
+
 <% end %>

@@ -11,15 +11,8 @@ consumer.subscriptions.create("NotificationChannel", {
 
   received(data) {
     // Called when there's incoming data on the websocket for this channel
-    var toast_container = document.getElementById("toast-container");
-    toast_container.innerHTML += data.html
-
-    // Re-initiate toasts
-    var newToast = new bootstrap.Toast(document.getElementById(data.id));
-    newToast.show();
-    window.setTimeout(function(){
-      newToast.hide();
-    }, 2000);
+    var icon_td = document.getElementsByClassName("icon-" + data.id)[0];
+    icon_td.innerHTML = data.icon
   },
 
   complete: function() {

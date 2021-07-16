@@ -7,8 +7,8 @@ class RecoverController < ApplicationController
     @file = params[:name] 
     @volume = params[:volume]
     VolumeRecoveryJob.perform_later @file, @volume
-    ToastJob.set(wait: 1.second).perform_later "recovery-scheduled", "primary", "Volume creation was successfully scheduled. It may take some time to complete."
-    render :create
+    flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
+    redirect_to recover_path
   end
 
   def download
@@ -19,7 +19,7 @@ class RecoverController < ApplicationController
   def delete
     file = params[:file]
     File.delete("/backup/#{file}.tar") if File.exist?("/backup/#{file}.tar")
-    ToastJob.set(wait: 1.second).perform_later "recovery-delete", "success", "The backup file was successfully deleted."
+    flash[:success] = "The backup file was successfully deleted."
     redirect_to recover_path
   end
 

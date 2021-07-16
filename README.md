@@ -28,5 +28,7 @@ Note: to manage large files, it's recommended to use external tools like scp, ft
 
 ## Development
 
-### Known issues
-* If Toasts are created too fast, they may not fade out. Refresh the page to clear all Toasts.
+Create a volume to run the application:
+```shell
+$ docker volume create --opt type=none --opt o=bind --opt device=/backup docker-backup
+```

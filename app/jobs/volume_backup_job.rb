@@ -20,6 +20,7 @@ class VolumeBackupJob < ApplicationJob
     launch_container(container_name)
 
     StatusCheckJob.perform_later :backup, container_name, file, volume
+    IconJob.perform_now volume, '<i class="far fa-clock"></i>'
     
   end
 end
