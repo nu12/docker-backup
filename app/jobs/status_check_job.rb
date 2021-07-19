@@ -12,6 +12,6 @@ class StatusCheckJob < ApplicationJob
 
     id = task == :backup ? volume : file
     
-    IconJob.perform_now id, '<i class="fas fa-check"></i>'
+    IconJob.perform_now id, ''
   end
 end
