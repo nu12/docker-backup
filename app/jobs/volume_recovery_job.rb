@@ -29,7 +29,7 @@ class VolumeRecoveryJob < ApplicationJob
     launch_container(container_name)
 
     StatusCheckJob.perform_later :recovery, container_name, file, volume
-    IconJob.perform_now file, '<i class="far fa-clock"></i>'
+    IconJob.perform_now file, '<i class="fas fa-cogs"></i>'
 
   end
 end

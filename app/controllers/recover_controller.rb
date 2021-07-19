@@ -1,12 +1,21 @@
 class RecoverController < ApplicationController
+  before_action :set_files, only: [:index, :batch_all]
   def index
-    @files = Dir.entries("/backup").select{|el| el != "." && el != ".."}
   end
 
   def create
     @file = params[:name] 
     @volume = params[:volume]
     VolumeRecoveryJob.perform_later @file, @volume
+    flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
+    redirect_to recover_path
+  end
+
+  def batch_all
+    @files.each do |file|
+      volume_name = file.split(".")[0]
+      VolumeRecoveryJob.perform_later file, volume_name
+    end
     flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
     redirect_to recover_path
   end
@@ -33,5 +42,11 @@ class RecoverController < ApplicationController
       end
     end
     redirect_to recover_path
+  end
+
+  private
+
+  def set_files
+    @files = Dir.entries("/backup").select{|el| el != "." && el != ".."}
   end
 end
