@@ -1,6 +1,6 @@
 class RecoverController < ApplicationController
   def index
-    @files = Dir.entries("/backup")
+    @files = Dir.entries("/backup").select{|el| el != "." && el != ".."}
   end
 
   def create

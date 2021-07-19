@@ -11,7 +11,7 @@
   </thead>
   <tbody>
 
-<% files.select{|el| el != "." && el != ".."}.each do |file| %>
+<% files.each do |file| %>
 
 <% file_name = file.split(".")[0] %>
 <tr>

@@ -2,6 +2,13 @@ class VolumeBackupJob < ApplicationJob
   queue_as :default
 
   def perform(volume, file)
+    v = Docker::API::Volume.new
+    response = v.details("docker-backup")
+
+    if response.status != 200
+      IconJob.set(wait: 1.second).perform_later file, '<i class="fas fa-exclamation-triangle text-danger">Volume named "docker-backup" not found.<br /> <a href="/setup.html">Learn more</a> .</i>'
+      return
+    end
     
     pull_image("ubuntu:latest")
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volume Backup Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <ul class="nav justify-content-end">
+          <li class="nav-item">
+            <a href="/volume" class="nav-link link-light">Volumes</a> 
+          </li>
+          <li class="nav-item">
+            <a href="/recover" class="nav-link link-light">Recovery</a> 
+          </li>
+        </ul>
+      </nav>
+
+      <div class="container mx-auto text-center my-5">
+        <i class="fas fa-exclamation-triangle h1"></i>
+        <h2>Important information:</h2>
+        <p>To run this application, create a volume named "docker-backup".</p>
+        <p class="bg-light text-dark">$ docker volume create --opt type=none --opt o=bind --opt device=/path/to/files docker-backup</p>
+      </div>
+    
+</body>
+</html>
