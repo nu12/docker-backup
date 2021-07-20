@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   post 'backup/create', to: "backup#create"
 
   get 'backup/all', to: "backup#batch_all"
+  post 'backup/selected', to: "backup#batch_selected"
   
   delete 'volume/:id', to: "backup#delete"
   
@@ -16,6 +17,7 @@ Rails.application.routes.draw do
   post 'recover/create', to: "recover#create"
 
   get 'recover/all', to: "recover#batch_all"
+  post 'recover/selected', to: "recover#batch_selected"
   
   get '/recover/upload', to: 'recover#upload'
   post '/recover/upload', to: 'recover#save'

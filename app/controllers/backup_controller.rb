@@ -19,6 +19,15 @@ class BackupController < ApplicationController
     redirect_to volume_path
   end
 
+  def batch_selected
+    selected = params[:volumes]
+    selected.each do |name|
+      VolumeBackupJob.perform_later name, name
+    end
+    flash[:primary] = "Backups for selected volumes were successfully scheduled. It may take some time to complete."
+    redirect_to volume_path
+  end
+
   def delete
     name = params[:id]
     v = Docker::API::Volume.new

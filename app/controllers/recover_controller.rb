@@ -20,6 +20,15 @@ class RecoverController < ApplicationController
     redirect_to recover_path
   end
 
+  def batch_selected
+    selected = params[:files]
+    selected.each do |name|
+      VolumeRecoveryJob.perform_later "#{name}.tar", name
+    end
+    flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
+    redirect_to recover_path
+  end
+
   def download
     file = params[:file]
     send_file "/backup/#{file}.tar", type: 'application/x-tar', status: 202

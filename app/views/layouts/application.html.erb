@@ -55,6 +55,12 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
       })
 
+      document.getElementById("check-all").addEventListener("click", (e) => {
+        document.querySelectorAll(".form-checkbox").forEach((ch) => {
+          ch.checked = e.target.checked
+        });
+      });
+
     </script>
   </body>
 </html>

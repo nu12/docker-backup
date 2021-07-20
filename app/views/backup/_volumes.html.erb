@@ -1,44 +1,48 @@
-<button type="button" class="btn btn-sm btn-secondary" disabled>Backup selected</button>
-<%= link_to 'Backup all', '/backup/all', class: "btn btn-sm btn-success" %>
+  
+<%= form_with(url: "/backup/selected", method: "post", class: "d-inline") do |f| %>
+  <%= f.submit "Backup selected", class: "btn btn-sm btn-success" %>
+  <%= link_to 'Backup all', '/backup/all', class: "btn btn-sm btn-success" %>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Mountpoint</th>
-      <th>CreatedAt</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="check-all"></th>
+        <th>Name</th>
+        <th>Mountpoint</th>
+        <th>CreatedAt</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+  <% volumes.each do |volume| %>
+  <tr>
+      <td><input value="<%= volume['Name'] %>" type="checkbox" name="volumes[]" class="form-checkbox"></td>
+      <td><%= volume["Name"].size > 24 ? "#{volume["Name"][0,21]}..." : volume["Name"]  %></td>
+      <td><%= volume["Mountpoint"].size > 42 ? "#{volume["Mountpoint"][0,39]}..." : volume["Mountpoint"] %></td>
+      <td><%= volume["CreatedAt"] %></td>
+      <td class="icon-<%= volume['Name'] %>"></td>
+      <td>
+        <%= link_to 'Create backup', "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{volume['Name']}"} %>
 
-<% volumes.each do |volume| %>
-<tr>
-    <td><%= volume["Name"].size > 24 ? "#{volume["Name"][0,21]}..." : volume["Name"]  %></td>
-    <td><%= volume["Mountpoint"].size > 42 ? "#{volume["Mountpoint"][0,39]}..." : volume["Mountpoint"] %></td>
-    <td><%= volume["CreatedAt"] %></td>
-    <td class="icon-<%= volume['Name'] %>"></td>
-    <td>
-      <%= link_to 'Create backup', "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{volume['Name']}"} %>
-
-      <!-- Quick backup button -->
-      <%= form_with(url: "/backup/create", method: "post", class: "d-inline") do |form| %>
-        <%= form.hidden_field :name, value: volume['Name'], readonly: "readonly" %>
-        <%= form.hidden_field :file, value: volume['Name'], readonly: "readonly" %>
-        <%= button_tag type: 'submit', class: "btn btn-success btn-sm", title: "Quick backup", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
-          <i class="fas fa-tachometer-alt"></i>
+        <!-- Quick backup button -->
+        <%= form_with(url: "/backup/create", method: "post", class: "d-inline") do |form| %>
+          <%= form.hidden_field :name, value: volume['Name'], readonly: "readonly" %>
+          <%= form.hidden_field :file, value: volume['Name'], readonly: "readonly" %>
+          <%= button_tag type: 'submit', class: "btn btn-success btn-sm", title: "Quick backup", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+            <i class="fas fa-tachometer-alt"></i>
+          <% end %>
         <% end %>
-      <% end %>
 
-      <%= link_to "/volume/#{volume["Name"]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete volume", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
-        <i class="fas fa-trash-alt"></i>
-      <% end %>
-    </td>
-</tr>
+        <%= link_to "/volume/#{volume["Name"]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete volume", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+          <i class="fas fa-trash-alt"></i>
+        <% end %>
+      </td>
+  </tr>
+  <% end %>
+  </tbody>
+  </table>
 <% end %>
-</tbody>
-</table>
 
 <% volumes.each do |volume| %>
 

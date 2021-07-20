@@ -1,46 +1,50 @@
-<button type="button" class="btn btn-sm btn-secondary" disabled>Recover selected</button>
-<%= link_to 'Recover all', '/recover/all', class: "btn btn-sm btn-success" %>
+<%= form_with(url: "/recover/selected", method: "post", class: "d-inline") do |f| %>
+  <%= f.submit "Recover selected", class: "btn btn-sm btn-success" %>
+  <%= link_to 'Recover all', '/recover/all', class: "btn btn-sm btn-success" %>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="check-all"></th>
+        <th>Name</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
 
-<% files.each do |file| %>
+  <% files.each do |file| %>
 
-<% file_name = file.split(".")[0] %>
-<tr>
-    <td><%= file.size > 24 ? "#{file[0,21]}..." : file %></td>
-    <td class="icon-<%= file %>"></td>
-    <td>
-      <%= link_to "Create volume", "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{file_name}"}  %>
-      
-      <!-- Quick backup button -->
-        <%= form_with(url: "/recover/create", method: "post", class: "d-inline") do |form| %>
-          <%= form.hidden_field :name, value: "#{file_name}.tar", readonly: "readonly" %>
-          <%= form.hidden_field :volume, value: "#{file_name}", readonly: "readonly" %>
-          <%= button_tag type: 'submit', class: "btn btn-success btn-sm", title: "Quick restore", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
-            <i class="fas fa-tachometer-alt"></i>
+  <% file_name = file.split(".")[0] %>
+  <tr>
+      <td><input value="<%= file_name %>" type="checkbox" name="files[]" class="form-checkbox"></td>
+      <td><%= file.size > 24 ? "#{file[0,21]}..." : file %></td>
+      <td class="icon-<%= file %>"></td>
+      <td>
+        <%= link_to "Create volume", "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{file_name}"}  %>
+        
+        <!-- Quick backup button -->
+          <%= form_with(url: "/recover/create", method: "post", class: "d-inline") do |form| %>
+            <%= form.hidden_field :name, value: "#{file_name}.tar", readonly: "readonly" %>
+            <%= form.hidden_field :volume, value: "#{file_name}", readonly: "readonly" %>
+            <%= button_tag type: 'submit', class: "btn btn-success btn-sm", title: "Quick restore", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+              <i class="fas fa-tachometer-alt"></i>
+            <% end %>
           <% end %>
+        
+        <%= link_to download_path(file), target: "_blank", class:"btn btn-primary btn-sm", title: "Download file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+          <i class="fas fa-download"></i>
         <% end %>
-      
-      <%= link_to download_path(file), target: "_blank", class:"btn btn-primary btn-sm", title: "Download file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
-        <i class="fas fa-download"></i>
-      <% end %>
 
-      <%= link_to "/recover/delete/#{file}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
-        <i class="fas fa-trash-alt"></i>
-      <% end %>
-    </td>
-</tr>
+        <%= link_to "/recover/delete/#{file}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+          <i class="fas fa-trash-alt"></i>
+        <% end %>
+      </td>
+  </tr>
+  <% end %>
+  </tbody>
+  </table>
 <% end %>
-</tbody>
-</table>
 
 <% files.each do |file| %>
 
