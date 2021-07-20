@@ -5,8 +5,9 @@ Rails.application.routes.draw do
   get 'volume', to: "backup#index"
 
   post 'backup/create', to: "backup#create"
+  post 'backup/create/:name/:file', to: "backup#create"
 
-  get 'backup/all', to: "backup#batch_all"
+  post 'backup/all', to: "backup#batch_all"
   post 'backup/selected', to: "backup#batch_selected"
   
   delete 'volume/:id', to: "backup#delete"
@@ -15,8 +16,9 @@ Rails.application.routes.draw do
   get 'recover', to: "recover#index"
   
   post 'recover/create', to: "recover#create"
+  post 'recover/create/:name/:volume', to: "recover#create", name: /[^\/]+/ 
 
-  get 'recover/all', to: "recover#batch_all"
+  post 'recover/all', to: "recover#batch_all"
   post 'recover/selected', to: "recover#batch_selected"
   
   get '/recover/upload', to: 'recover#upload'

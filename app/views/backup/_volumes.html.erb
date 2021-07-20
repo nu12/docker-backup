@@ -1,7 +1,7 @@
   
 <%= form_with(url: "/backup/selected", method: "post", class: "d-inline") do |f| %>
   <%= f.submit "Backup selected", class: "btn btn-sm btn-success" %>
-  <%= link_to 'Backup all', '/backup/all', class: "btn btn-sm btn-success" %>
+  <%= link_to 'Backup all', '/backup/all', method: :post, class: "btn btn-sm btn-success" %>
 
   <table class="table table-striped">
     <thead>
@@ -25,13 +25,8 @@
       <td>
         <%= link_to 'Create backup', "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{volume['Name']}"} %>
 
-        <!-- Quick backup button -->
-        <%= form_with(url: "/backup/create", method: "post", class: "d-inline") do |form| %>
-          <%= form.hidden_field :name, value: volume['Name'], readonly: "readonly" %>
-          <%= form.hidden_field :file, value: volume['Name'], readonly: "readonly" %>
-          <%= button_tag type: 'submit', class: "btn btn-success btn-sm", title: "Quick backup", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
-            <i class="fas fa-tachometer-alt"></i>
-          <% end %>
+        <%= link_to "/backup/create/#{volume['Name']}/#{volume['Name']}", method: :post, class:"btn btn-success btn-sm", title: "Quick backup", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+        <i class="fas fa-tachometer-alt"></i>
         <% end %>
 
         <%= link_to "/volume/#{volume["Name"]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete volume", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>

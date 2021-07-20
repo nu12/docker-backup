@@ -1,6 +1,6 @@
 <%= form_with(url: "/recover/selected", method: "post", class: "d-inline") do |f| %>
   <%= f.submit "Recover selected", class: "btn btn-sm btn-success" %>
-  <%= link_to 'Recover all', '/recover/all', class: "btn btn-sm btn-success" %>
+  <%= link_to 'Recover all', '/recover/all', method: :post, class: "btn btn-sm btn-success" %>
 
   <table class="table table-striped">
     <thead>
@@ -23,15 +23,10 @@
       <td>
         <%= link_to "Create volume", "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{file_name}"}  %>
         
-        <!-- Quick backup button -->
-          <%= form_with(url: "/recover/create", method: "post", class: "d-inline") do |form| %>
-            <%= form.hidden_field :name, value: "#{file_name}.tar", readonly: "readonly" %>
-            <%= form.hidden_field :volume, value: "#{file_name}", readonly: "readonly" %>
-            <%= button_tag type: 'submit', class: "btn btn-success btn-sm", title: "Quick restore", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
-              <i class="fas fa-tachometer-alt"></i>
-            <% end %>
-          <% end %>
-        
+        <%= link_to "/recover/create/#{file}/#{file_name}", method: :post, class:"btn btn-success btn-sm", title: "Quick restore", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
+        <i class="fas fa-tachometer-alt"></i>
+        <% end %>
+          
         <%= link_to download_path(file), target: "_blank", class:"btn btn-primary btn-sm", title: "Download file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do %>
           <i class="fas fa-download"></i>
         <% end %>
