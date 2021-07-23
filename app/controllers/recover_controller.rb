@@ -2,35 +2,26 @@ class RecoverController < ApplicationController
   before_action :set_files, only: [:index, :batch_all]
   def index
     @running = Task.get_running_restore
-    p @running.inspect
   end
 
   def create
-    @file = params[:name] 
-    @volume = params[:volume]
-    VolumeRecoveryJob.perform_later @file, @volume
-    Task.add_restore @file
-    flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
+    process_batch(
+      [ { file: params[:name] , volume: params[:volume] } ],
+      "Volume creation was successfully scheduled. It may take some time to complete.")
     redirect_to recover_path
   end
 
   def batch_all
-    @files.each do |file|
-      volume_name = file.split(".")[0]
-      VolumeRecoveryJob.perform_later file, volume_name
-      Task.add_restore file
-    end
-    flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
+    process_batch(
+      @files.map{ | file | { file: file, volume: file.split(".")[0] } },
+      "Volume creation was successfully scheduled. It may take some time to complete.")
     redirect_to recover_path
   end
 
   def batch_selected
-    selected = params[:files]
-    selected.each do |name|
-      VolumeRecoveryJob.perform_later "#{name}.tar", name
-      Task.add_restore "#{name}.tar"
-    end
-    flash[:primary] = "Volume creation was successfully scheduled. It may take some time to complete."
+    process_batch(
+      params[:files].map { |file| { file: "#{file}.tar", volume: file } },
+      "Volume creation was successfully scheduled. It may take some time to complete.")
     redirect_to recover_path
   end
 
@@ -62,5 +53,13 @@ class RecoverController < ApplicationController
 
   def set_files
     @files = Dir.entries("/backup").select{|el| el != "." && el != ".."}
+  end
+
+  def process_batch list, msg
+    list.each do |item|
+      VolumeRecoveryJob.perform_later item[:file], item[:volume]
+      Task.add_restore "#{item[:file]}"
+    end
+    flash[:primary] = msg
   end
 end
