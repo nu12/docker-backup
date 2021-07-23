@@ -10,8 +10,13 @@ class StatusCheckJob < ApplicationJob
       return
     end
 
-    id = task == :backup ? volume : file
-    
-    IconJob.perform_now id, ''
+    if task == :backup
+      Task.remove_backup volume
+      IconJob.perform_now volume, ''
+    else
+      Task.remove_restore file
+      IconJob.perform_now file, ''
+    end
+
   end
 end

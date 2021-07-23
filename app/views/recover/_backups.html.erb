@@ -2,6 +2,10 @@
   <%= f.submit "Recover selected", class: "btn btn-sm btn-success" %>
   <%= link_to 'Recover all', '/recover/all', method: :post, class: "btn btn-sm btn-success" %>
 
+  <div class="text-center bg-light">
+    <p class="h4"><i class="fas fa-cogs"></i> Running restore tasks: <span id="running-counter"><%= @running.size %></span></p>
+  </div>
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -19,7 +23,9 @@
   <tr>
       <td><input value="<%= file_name %>" type="checkbox" name="files[]" class="form-checkbox"></td>
       <td><%= file.size > 24 ? "#{file[0,21]}..." : file %></td>
-      <td class="icon-<%= file %>"></td>
+      <td class="icon-<%= file %>">
+        <%= @running.include?(file) ? '<i class="fas fa-cogs"></i>'.html_safe  : '' %>
+      </td>
       <td>
         <%= link_to "Create volume", "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{file_name}"}  %>
         
@@ -50,7 +56,7 @@
 <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Create new backup file</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Create new volume</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">

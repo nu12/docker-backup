@@ -7,6 +7,7 @@ class VolumeBackupJob < ApplicationJob
 
     if response.status != 200
       IconJob.set(wait: 1.second).perform_later file, '<i class="fas fa-exclamation-triangle text-danger">Volume named "docker-backup" not found.<br /> <a href="/setup.html">Learn more</a> .</i>'
+      Task.remove_backup volume
       return
     end
     
@@ -27,7 +28,5 @@ class VolumeBackupJob < ApplicationJob
     launch_container(container_name)
 
     StatusCheckJob.perform_later :backup, container_name, file, volume
-    IconJob.perform_now volume, '<i class="fas fa-cogs"></i>'
-    
   end
 end

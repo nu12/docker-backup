@@ -7,6 +7,7 @@ class VolumeRecoveryJob < ApplicationJob
 
     if response.status == 200
       IconJob.set(wait: 1.second).perform_later file, '<i class="fas fa-exclamation-triangle text-danger">Volume already exists. Choose a different name.</i>'
+      Task.remove_restore file
       return
     end
 
@@ -29,7 +30,5 @@ class VolumeRecoveryJob < ApplicationJob
     launch_container(container_name)
 
     StatusCheckJob.perform_later :recovery, container_name, file, volume
-    IconJob.perform_now file, '<i class="fas fa-cogs"></i>'
-
   end
 end

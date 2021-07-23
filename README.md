@@ -32,3 +32,8 @@ Create a volume to run the application:
 ```shell
 $ docker volume create --opt type=none --opt o=bind --opt device=/backup docker-backup
 ```
+
+Create a local redis server:
+```shell
+$ docker run --name redis -p 6379:6379 -d redis
+```

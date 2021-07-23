@@ -3,6 +3,10 @@
   <%= f.submit "Backup selected", class: "btn btn-sm btn-success" %>
   <%= link_to 'Backup all', '/backup/all', method: :post, class: "btn btn-sm btn-success" %>
 
+  <div class="text-center bg-light">
+    <p class="h4"><i class="fas fa-cogs"></i> Running backup tasks: <span id="running-counter"><%= @running.size %></span></p>
+  </div>
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -21,7 +25,9 @@
       <td><%= volume["Name"].size > 24 ? "#{volume["Name"][0,21]}..." : volume["Name"]  %></td>
       <td><%= volume["Mountpoint"].size > 42 ? "#{volume["Mountpoint"][0,39]}..." : volume["Mountpoint"] %></td>
       <td><%= volume["CreatedAt"] %></td>
-      <td class="icon-<%= volume['Name'] %>"></td>
+      <td class="icon-<%= volume['Name'] %>">
+        <%= @running.include?(volume['Name']) ? '<i class="fas fa-cogs"></i>'.html_safe  : '' %>
+      </td>
       <td>
         <%= link_to 'Create backup', "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{volume['Name']}"} %>
 

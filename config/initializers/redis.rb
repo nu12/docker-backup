@@ -1,0 +1,1 @@
+$redis = Redis::Namespace.new("volume-backup-tool", :redis => Redis.new(host: "localhost"))
