@@ -1,0 +1,9 @@
+%h1 Docker volumes
+%p 
+  From this page you can create a 
+  %span.badge.bg-primary .tar
+  file from any existing volume.
+- if @volumes.size > 0
+  = render "volumes"
+- else
+  = render "empty"

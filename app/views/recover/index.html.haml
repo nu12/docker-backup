@@ -1,0 +1,15 @@
+%h1 Restore files
+%p 
+  From this page you can create a volume from any 
+  %span.badge.bg-primary .tar
+  file listed below.</p>
+
+= link_to "/recover/upload", class:"btn btn-primary btn-sm" do
+  %i.fas.fa-upload
+  Upload file
+= space
+
+- if @files.size > 0 
+  = render 'backups'
+- else
+  = render 'empty'

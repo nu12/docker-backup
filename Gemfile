@@ -5,6 +5,8 @@ ruby '2.7.2'
 
 gem 'dockerapi'
 
+gem "haml", '~> 5.2.1'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.3', '>= 6.1.3.2'
 # Use Puma as the app server
@@ -22,7 +24,7 @@ gem 'redis', '~> 4.0'
 # Use Redis gems to run a redis database
 gem 'redis-namespace'
 gem 'redis-rails'
-gem 'redis-rack-cache'
+#gem 'redis-rack-cache'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

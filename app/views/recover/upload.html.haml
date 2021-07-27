@@ -1,0 +1,13 @@
+%h1 Recovery files
+%p 
+    Upload 
+    %span.badge.bg-primary .tar
+    file.
+
+.col-8.m-auto
+    = form_with(url: "/recover/upload", method: "post") do |form|
+        .form-group
+            = form.label :file, "Select file"
+            = form.file_field :file, multiple: true, accept: "application/x-tar"
+        .mt-3.actions
+            = form.submit "Upload file", class: "btn btn-primary form-control"

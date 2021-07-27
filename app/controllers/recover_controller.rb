@@ -13,7 +13,7 @@ class RecoverController < ApplicationController
 
   def batch_all
     process_batch(
-      @files.map{ | file | { file: file, volume: file.split(".")[0] } },
+      @files.map{ | file | { file: file[:full_name], volume: file[:short_name] } },
       "Volume creation was successfully scheduled. It may take some time to complete.")
     redirect_to recover_path
   end
@@ -52,7 +52,7 @@ class RecoverController < ApplicationController
   private
 
   def set_files
-    @files = Dir.entries("/backup").select{|el| el != "." && el != ".."}
+    @files = Dir.entries("/backup").select{|el| el != "." && el != ".."}.map{ | f | { full_name: f, short_name: f.split(".")[0] } }
   end
 
   def process_batch list, msg

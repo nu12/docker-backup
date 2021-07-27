@@ -1,0 +1,56 @@
+= form_with(url: "/recover/selected", method: "post", class: "d-inline") do |f|
+  = f.submit "Recover selected", class: "btn btn-sm btn-success"
+  = link_to 'Recover all', '/recover/all', method: :post, class: "btn btn-sm btn-success"
+
+  .text-center.bg-light
+    %p.h4
+      %i.fas.fa-cogs
+      Running restore tasks: 
+      %span#running-counter
+        = @running.size
+
+  %table.table.table-striped
+    %thead
+      %tr
+        %th
+          %input(type="checkbox" id="check-all")
+        %th Name
+        %th
+        %th
+    %tbody
+      - @files.each do |file|
+        %tr
+          %td
+            %input(value="#{file[:short_name]}" type="checkbox" name="files[]" class="form-checkbox")
+          %td= file[:full_name].size > 24 ? "#{file[:full_name][0,21]}..." : file[:full_name]
+          %td(class="icon-#{file[:full_name]}")
+            = @running.include?(file[:full_name]) ? '<i class="fas fa-cogs"></i>'.html_safe  : ''
+          %td
+            = link_to "Create volume", "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{file[:short_name]}"}
+            
+            = link_to "/recover/create/#{file[:full_name]}/#{file[:short_name]}", method: :post, class:"btn btn-success btn-sm", title: "Quick restore", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do
+              %i.fas.fa-tachometer-alt
+            = space
+            = link_to download_path(file[:full_name]), target: "_blank", class:"btn btn-primary btn-sm", title: "Download file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do
+              %i.fas.fa-download
+            = space
+            = link_to "/recover/delete/#{file[:full_name]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete file", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do
+              %i.fas.fa-trash-alt
+
+- @files.each do |file|
+  %div(class="modal fade" id="modal-#{file[:short_name]}" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %h5.modal-title#exampleModalLabel Create new volume
+          %button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+        .modal-body
+          = form_with(url: "/recover/create", method: "post", local: true) do |form| 
+            .form-group>
+              = form.label :name, "File name"
+              = form.text_field :name, value: file[:full_name], readonly: "readonly", class: "form-control"
+            .form-group
+              = form.label :volume, "New volume name"
+              = form.text_field :volume, value: file[:short_name], class: "form-control"
+            .mt-3.actions
+              = form.submit "Create", class: "btn btn-success form-control"
