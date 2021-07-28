@@ -3,7 +3,6 @@ class RecoverController < ApplicationController
   before_action :set_files, only: [:index, :batch_all]
   def index
     @running = Task.get_running_restore
-    p "===============================>> #{@files}"
   end
 
   def create
