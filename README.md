@@ -8,11 +8,13 @@ Create a volume called `docker-backup` and configure `/path/to/files` to be a fo
 ```shell
 $ docker volume create --opt type=none --opt o=bind --opt device=/path/to/files docker-backup
 ```
- Map the volume created and the docker socket.
+Bind the volume created and the docker socket.
 
 ```shell
 $ docker run -d --rm -p 3000:3000 -v docker-backup:/backup -v /var/run/docker.sock:/var/run/docker.sock nu12/volume-backup-tool
 ```
+
+Optionally, use `-e PASSWORD=your-password` to enable authentication.
 
 ## Usage
 
@@ -20,7 +22,7 @@ Use the `Volumes` page to view a list of all volumes available. Create a backup 
 
 ![alt text](public/backup.PNG)
 
-In the `Recovery` page you can see all `.tar` files generated. You can also download created files and upload previously downloaded files.
+In the `Restore` page you can see all `.tar` files generated. You can also download created files and upload previously downloaded files.
 
 ![alt text](public/recovery.PNG)
 
