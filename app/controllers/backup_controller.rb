@@ -11,21 +11,21 @@ class BackupController < ApplicationController
     process_batch( 
       [ { volume: volume, file: file} ],
       "Backup for volume #{volume} was successfully scheduled. It may take some time to complete.")
-    redirect_to volume_path
+    redirect_to volume_list_path
   end
 
   def batch_all
     process_batch( 
       @volumes.map{ | volume | { volume: volume["Name"] , file: volume["Name"] } },
       "Backups for all volumes were successfully scheduled. It may take some time to complete.")
-    redirect_to volume_path
+    redirect_to volume_list_path
   end
 
   def batch_selected
     process_batch( 
       params[:volumes].map{ | volume_name | { volume: volume_name , file: volume_name } },
       "Backups for selected volumes were successfully scheduled. It may take some time to complete.")
-    redirect_to volume_path
+    redirect_to volume_list_path
   end
 
   def delete
@@ -37,7 +37,7 @@ class BackupController < ApplicationController
     else
       flash[:danger] = r.json["message"]
     end
-    redirect_to volume_path
+    redirect_to volume_list_path
   end
 
   private

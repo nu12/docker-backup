@@ -3,27 +3,28 @@ class RecoverController < ApplicationController
   before_action :set_files, only: [:index, :batch_all]
   def index
     @running = Task.get_running_restore
+    p "===============================>> #{@files}"
   end
 
   def create
     process_batch(
       [ { file: params[:name] , volume: params[:volume] } ],
       "Volume creation was successfully scheduled. It may take some time to complete.")
-    redirect_to recover_path
+    redirect_to restore_list_path
   end
 
   def batch_all
     process_batch(
       @files.map{ | file | { file: file[:full_name], volume: file[:short_name] } },
       "Volume creation was successfully scheduled. It may take some time to complete.")
-    redirect_to recover_path
+    redirect_to restore_list_path
   end
 
   def batch_selected
     process_batch(
       params[:files].map { |file| { file: "#{file}.tar", volume: file } },
       "Volume creation was successfully scheduled. It may take some time to complete.")
-    redirect_to recover_path
+    redirect_to restore_list_path
   end
 
   def download
@@ -35,7 +36,7 @@ class RecoverController < ApplicationController
     file = params[:file]
     File.delete("/backup/#{file}.tar") if File.exist?("/backup/#{file}.tar")
     flash[:success] = "The backup file was successfully deleted."
-    redirect_to recover_path
+    redirect_to restore_list_path
   end
 
   def upload
@@ -47,7 +48,7 @@ class RecoverController < ApplicationController
         file.write(uploaded_io.read)
       end
     end
-    redirect_to recover_path
+    redirect_to restore_list_path
   end
 
   private

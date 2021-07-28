@@ -1,17 +1,19 @@
-= form_with(url: "/backup/selected", method: "post", class: "d-inline") do |f|
+= form_with(url: backup_selected_path, method: "post", class: "d-inline") do |f|
   = f.submit "Backup selected", class: "btn btn-sm btn-success"
-  = link_to 'Backup all', '/backup/all', method: :post, class: "btn btn-sm btn-success"
+  = link_to 'Backup all', backup_all_path, method: :post, class: "btn btn-sm btn-success"
   
   .text-center.bg-light
     %p.h4
       %i.fas.fa-cogs
       Running backup tasks:
-      %span#running-counter= @running.size
+      %span#running-counter
+        = @running.size
   
   %table.table.table-striped
     %thead
       %tr
-        %th <input type="checkbox" id="check-all">
+        %th
+          %input(type="checkbox" id="check-all")
         %th Name
         %th Mountpoint
         %th Created at
@@ -25,13 +27,14 @@
           %td= volume["Name"].size > 24 ? "#{volume["Name"][0,21]}..." : volume["Name"]
           %td= volume["Mountpoint"].size > 42 ? "#{volume["Mountpoint"][0,39]}..." : volume["Mountpoint"]
           %td= volume["CreatedAt"]
-          %td{class: "icon-#{volume['Name']}"}= @running.include?(volume['Name']) ? '<i class="fas fa-cogs"></i>'.html_safe  : ''
+          %td(class="icon-#{volume['Name']}")
+            = @running.include?(volume['Name']) ? '<i class="fas fa-cogs"></i>'.html_safe  : ''
           %td
             = link_to 'Create backup', "#", {class:"btn btn-success btn-sm", 'data-bs-toggle'=>"modal", 'data-bs-target'=>"#modal-#{volume['Name']}"}
-            = link_to "/backup/create/#{volume['Name']}/#{volume['Name']}", method: :post, class:"btn btn-success btn-sm", title: "Quick backup", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do
+            = link_to backup_quick_create_path(volume['Name'],volume['Name']), method: :post, class:"btn btn-success btn-sm", title: "Quick backup", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do
               %i.fas.fa-tachometer-alt 
             = space
-            = link_to "/volume/#{volume["Name"]}", method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete volume", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do
+            = link_to volume_delete_path(volume["Name"]), method: :delete, data: { confirm: 'Are you sure?' }, class:"btn btn-danger btn-sm", title: "Delete volume", "data-bs-toggle" => "tooltip", "data-bs-placement"=>"top" do
               %i.fas.fa-trash-alt 
 
 - @volumes.each do |volume| 
@@ -42,7 +45,7 @@
           %h5.modal-title#exampleModalLabel Create new backup file
           %button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
         .modal-body
-          = form_with(url: "/backup/create", method: "post") do |form|
+          = form_with(url: backup_create_path, method: "post") do |form|
             .form-group
               = form.label :name, "Volume name"
               = form.text_field :name, value: volume['Name'], readonly: "readonly", class: "form-control"

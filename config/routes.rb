@@ -2,31 +2,31 @@ Rails.application.routes.draw do
   root to: "backup#index"
 
   # Volume / backup routes
-  get 'volume', to: "backup#index"
-
-  post 'backup/create', to: "backup#create"
-  post 'backup/create/:name/:file', to: "backup#create"
-
-  post 'backup/all', to: "backup#batch_all"
-  post 'backup/selected', to: "backup#batch_selected"
+  get 'volume', to: "backup#index", as: :volume_list
   
-  delete 'volume/:id', to: "backup#delete"
+  post 'backup/create', to: "backup#create", as: :backup_create
+  post 'backup/create/:name/:file', to: "backup#create", as: :backup_quick_create
   
-  # Recovery routes
-  get 'recover', to: "recover#index"
+  post 'backup/all', to: "backup#batch_all", as: :backup_all
+  post 'backup/selected', to: "backup#batch_selected", as: :backup_selected
   
-  post 'recover/create', to: "recover#create"
-  post 'recover/create/:name/:volume', to: "recover#create", name: /[^\/]+/ 
-
-  post 'recover/all', to: "recover#batch_all"
-  post 'recover/selected', to: "recover#batch_selected"
+  delete 'volume/:id', to: "backup#delete", as: :volume_delete
   
-  get '/recover/upload', to: 'recover#upload'
-  post '/recover/upload', to: 'recover#save'
+  # Restore routes
+  get 'restore', to: "recover#index", as: :restore_list
   
-  get '/recover/download/:file', to: 'recover#download', as: 'download'
+  post 'restore/create', to: "recover#create", as: :restore_create
+  post 'restore/create/:name/:volume', to: "recover#create", name: /[^\/]+/ , as: :restore_quick_create
   
-  delete '/recover/delete/:file', to: 'recover#delete'
+  post 'restore/all', to: "recover#batch_all", as: :restore_all
+  post 'restore/selected', to: "recover#batch_selected", as: :restore_selected
+  
+  get '/restore/upload', to: 'recover#upload', as: :restore_upload
+  post '/restore/upload', to: 'recover#save', as: :restore_save
+  
+  get '/restore/download/:file', to: 'recover#download', as: :restore_download
+  
+  delete '/restore/:file', to: 'recover#delete', as: :restore_delete
   
   # Session routes
   get 'authenticate', to: "session#new"

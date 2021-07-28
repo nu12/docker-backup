@@ -5,7 +5,7 @@
     file.
 
 .col-8.m-auto
-    = form_with(url: "/recover/upload", method: "post") do |form|
+    = form_with(url: restore_save_path, method: "post") do |form|
         .form-group
             = form.label :file, "Select file"
             = form.file_field :file, multiple: true, accept: "application/x-tar"
