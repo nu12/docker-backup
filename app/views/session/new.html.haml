@@ -1,0 +1,8 @@
+%h1 Authenticate
+
+.col-8.m-auto
+    = form_with(url: session_create_path, method: "post", local: false) do |form|
+        .form-group
+            = form.password_field :password, placeholder: "Password" ,class: "form-control"
+        .mt-3.actions
+            = form.submit "Authenticate", class: "btn btn-primary form-control"

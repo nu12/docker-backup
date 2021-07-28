@@ -28,5 +28,9 @@ Rails.application.routes.draw do
   
   delete '/recover/delete/:file', to: 'recover#delete'
   
+  # Session routes
+  get 'authenticate', to: "session#new"
+  post 'session/create'
+  delete 'session/destroy'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

@@ -113,4 +113,6 @@ Rails.application.configure do
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
 
   config.cache_store = :redis_store, 'redis://localhost:6379/0/cache', { expires_in: 90.minutes }
+  config.password_enabled = ENV['PASSWORD'].present?
+  config.password = ENV['PASSWORD'].present? ? ENV['PASSWORD'] : nil
 end

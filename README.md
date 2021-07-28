@@ -37,3 +37,11 @@ Create a local redis server:
 ```shell
 $ docker run --name redis -p 6379:6379 -d redis
 ```
+
+Enable authentication in development by editing `config/environments/development.rb`:
+```ruby
+config.password_enabled = true
+if config.password_enabled
+    config.password = 'dev-password'
+end
+```

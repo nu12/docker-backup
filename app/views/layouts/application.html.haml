@@ -18,6 +18,10 @@
         %li.nav-item
           = link_to "Restore", recover_path, class: "nav-link link-light"
 
+        - if @logged_in
+          %li.nav-item
+            = link_to "Log out", session_destroy_path, method: :delete,class: "nav-link link-light"
+
     .container
       = yield
     

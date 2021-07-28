@@ -46,7 +46,7 @@
           %button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
         .modal-body
           = form_with(url: "/recover/create", method: "post", local: true) do |form| 
-            .form-group>
+            .form-group
               = form.label :name, "File name"
               = form.text_field :name, value: file[:full_name], readonly: "readonly", class: "form-control"
             .form-group

@@ -1,4 +1,5 @@
 class BackupController < ApplicationController
+  before_action :authenticate!
   before_action :set_volumes, only: [:index, :batch_all]
   def index
     @running = Task.get_running_backup
